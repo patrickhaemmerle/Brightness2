@@ -2,15 +2,15 @@ package io.haemmi.brightness2.hue.bridgeDiscovery;
 
 public class DiscoveredBridge {
 
-    private String uid;
-    private String ip;
+    private String id;
+    private String internalipaddress;
 
-    public String getIp() {
-        return ip;
+    public String getIternalipaddress() {
+        return internalipaddress;
     }
 
-    public String getUid() {
-        return uid;
+    public String getId() {
+        return id;
     }
 
 }

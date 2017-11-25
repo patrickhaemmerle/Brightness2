@@ -3,10 +3,13 @@ package io.haemmi.brightness2.hue.bridgeDiscovery.nupnp;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import io.haemmi.brightness2.hue.bridgeDiscovery.BridgeDiscovery;
 import io.haemmi.brightness2.hue.bridgeDiscovery.DiscoveredBridge;
 import io.reactivex.Single;
+import io.reactivex.internal.schedulers.ExecutorScheduler;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,7 +35,7 @@ class BridgeDiscoveryImplNupnp implements BridgeDiscovery {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         BridgeDiscoveryApi api = retrofit.create(BridgeDiscoveryApi.class);
-        return api.discoverBridges();
+        return api.discoverBridges().subscribeOn(Schedulers.io());
     }
 
 }

@@ -50,14 +50,11 @@ public class BridgeDiscoveryImplNupnpTest {
         BridgeDiscoveryImplNupnp bd = new BridgeDiscoveryImplNupnp();
         bd.setNupnpUrl("http://localhost:8080");
 
-        List<DiscoveredBridge> bridges = new ArrayList<DiscoveredBridge>();
-        bd.discover().subscribe(bridgeList -> {
-            bridges.addAll(bridgeList);
-        });
+        List<DiscoveredBridge> bridges = bd.discover().blockingGet();
 
         assertEquals(1, bridges.size());
-        assertEquals("001788fffe100491", bridges.get(0).getUid());
-        assertEquals("192.168.2.23", bridges.get(0).getIp());
+        assertEquals("001788fffe100491", bridges.get(0).getId());
+        assertEquals("192.168.2.23", bridges.get(0).getIternalipaddress());
     }
 
     @Test
