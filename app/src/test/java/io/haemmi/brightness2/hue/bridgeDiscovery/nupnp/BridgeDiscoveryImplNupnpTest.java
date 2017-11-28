@@ -5,20 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.haemmi.brightness2.hue.bridgeDiscovery.DiscoveredBridge;
-import io.haemmi.brightness2.hue.bridgeDiscovery.nupnp.BridgeDiscoveryImplNupnp;
-import io.reactivex.observers.BaseTestConsumer;
-import io.reactivex.subscribers.TestSubscriber;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 
 public class BridgeDiscoveryImplNupnpTest {
 
@@ -59,12 +52,38 @@ public class BridgeDiscoveryImplNupnpTest {
 
     @Test
     public void multipleResultsReturned() {
-        fail("Implement me!");
+
+        mockWebServer.enqueue(new MockResponse().setBody("[{\n" +
+                "     \"id\":\"001788fffe100491\",\n" +
+                "     \"internalipaddress\":\"192.168.2.23\",\n" +
+                "     \"macaddress\":\"00:17:88:10:04:91\",\n" +
+                "     \"name\":\"Philips Hue\"\n" +
+                "}, {\"id\":\"001788fffe100492\",\n" +
+                "     \"internalipaddress\":\"192.168.2.24\",\n" +
+                "     \"macaddress\":\"00:17:88:10:04:92\",\n" +
+                "     \"name\":\"Philips Hue 2\"\n" +
+                "}]"));
+
+        BridgeDiscoveryImplNupnp bd = new BridgeDiscoveryImplNupnp();
+        bd.setNupnpUrl("http://localhost:8080");
+
+        List<DiscoveredBridge> bridges = bd.discover().blockingGet();
+
+        assertEquals(2, bridges.size());
+        assertEquals("001788fffe100491", bridges.get(0).getId());
+        assertEquals("192.168.2.23", bridges.get(0).getIternalipaddress());
     }
 
     @Test
     public void emptyResultsReturned() {
-        fail("Implement me!");
-    }
 
+        mockWebServer.enqueue(new MockResponse().setBody("[]"));
+
+        BridgeDiscoveryImplNupnp bd = new BridgeDiscoveryImplNupnp();
+        bd.setNupnpUrl("http://localhost:8080");
+
+        List<DiscoveredBridge> bridges = bd.discover().blockingGet();
+
+        assertEquals(0, bridges.size());
+    }
 }
