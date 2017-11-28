@@ -1,4 +1,4 @@
-package io.haemmi.brightness2.hue.bridgeDiscovery.nupnp;
+package io.haemmi.brightness2.hue.bridgeDiscovery;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,13 +7,12 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import io.haemmi.brightness2.hue.bridgeDiscovery.DiscoveredBridge;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
 import static junit.framework.Assert.assertEquals;
 
-public class BridgeDiscoveryImplNupnpTest {
+public class NupnpBridgeDiscoveryImplTest {
 
     private MockWebServer mockWebServer;
 
@@ -40,7 +39,7 @@ public class BridgeDiscoveryImplNupnpTest {
                 "     \"name\":\"Philips Hue\"\n" +
                 "}]"));
 
-        BridgeDiscoveryImplNupnp bd = new BridgeDiscoveryImplNupnp();
+        NupnpBridgeDiscoveryImpl bd = new NupnpBridgeDiscoveryImpl();
         bd.setNupnpUrl("http://localhost:8080");
 
         List<DiscoveredBridge> bridges = bd.discover().blockingGet();
@@ -64,7 +63,7 @@ public class BridgeDiscoveryImplNupnpTest {
                 "     \"name\":\"Philips Hue 2\"\n" +
                 "}]"));
 
-        BridgeDiscoveryImplNupnp bd = new BridgeDiscoveryImplNupnp();
+        NupnpBridgeDiscoveryImpl bd = new NupnpBridgeDiscoveryImpl();
         bd.setNupnpUrl("http://localhost:8080");
 
         List<DiscoveredBridge> bridges = bd.discover().blockingGet();
@@ -79,7 +78,7 @@ public class BridgeDiscoveryImplNupnpTest {
 
         mockWebServer.enqueue(new MockResponse().setBody("[]"));
 
-        BridgeDiscoveryImplNupnp bd = new BridgeDiscoveryImplNupnp();
+        NupnpBridgeDiscoveryImpl bd = new NupnpBridgeDiscoveryImpl();
         bd.setNupnpUrl("http://localhost:8080");
 
         List<DiscoveredBridge> bridges = bd.discover().blockingGet();
